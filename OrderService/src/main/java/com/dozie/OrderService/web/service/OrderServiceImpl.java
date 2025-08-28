@@ -1,6 +1,7 @@
 package com.dozie.OrderService.web.service;
 
 import com.dozie.OrderService.web.entity.Order;
+import com.dozie.OrderService.web.external.client.ProductService;
 import com.dozie.OrderService.web.repository.OrderRepository;
 import com.dozie.OrderService.web.request.OrderRequest;
 import com.dozie.OrderService.web.response.OrderResponse;
@@ -18,6 +19,7 @@ import java.util.stream.Collectors;
 public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
+    private final ProductService productService;
 
     private final com.dozie.OrderService.web.service.BaseService baseService;
 
@@ -29,6 +31,8 @@ public class OrderServiceImpl implements OrderService {
         // Payment service
         // Cancel ==> if order fails
 
+        productService.reduceQuantity(request.getProductId(), request.getQuantity());
+        log.info("Creating Order with status created");
         log.info("create Order {}", request);
         Order order = Order.builder()
                 .orderStatus("CREATED")

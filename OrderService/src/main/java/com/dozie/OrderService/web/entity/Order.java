@@ -22,7 +22,7 @@ public class Order implements Serializable {
     @Id @GeneratedValue(strategy = GenerationType.UUID)
     private String id;
     private String productId;
-    private Long quantity;
+    private Integer quantity;
     private Instant orderDate;
     private String orderStatus;
     private Long amount;
