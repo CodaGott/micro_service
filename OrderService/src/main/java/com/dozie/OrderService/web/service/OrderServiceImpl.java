@@ -1,6 +1,8 @@
 package com.dozie.OrderService.web.service;
 
 import com.dozie.OrderService.web.entity.Order;
+import com.dozie.OrderService.web.entity.dto.PaymentRequest;
+import com.dozie.OrderService.web.external.client.PaymentService;
 import com.dozie.OrderService.web.external.client.ProductService;
 import com.dozie.OrderService.web.repository.OrderRepository;
 import com.dozie.OrderService.web.request.OrderRequest;
@@ -20,6 +22,7 @@ public class OrderServiceImpl implements OrderService {
 
     private final OrderRepository orderRepository;
     private final ProductService productService;
+    private final PaymentService paymentService;
 
     private final com.dozie.OrderService.web.service.BaseService baseService;
 
@@ -43,7 +46,24 @@ public class OrderServiceImpl implements OrderService {
                 .build();
 
         order = orderRepository.save(order);
+        PaymentRequest paymentRequest = PaymentRequest.builder()
+                .orderId(order.getId())
+                .paymentMode(request.getPaymentMode())
+                .amount(request.getTotalPrice())
+                .build();
 
+        String orderStatus = null;
+
+        try {
+            paymentService.initiatePayment(paymentRequest);
+            log.info("Initiated Order payment successful");
+            orderStatus = "PLACED";
+        }catch (Exception ex){
+            log.info("Initiated Order payment failed, Changing order status");
+            orderStatus = "PAYMENT_FAILED";
+        }
+        order.setOrderStatus(orderStatus);
+        order = orderRepository.save(order);
         log.info("order completed {}", order);
 
         return baseService.buildOrderResponse(order);
