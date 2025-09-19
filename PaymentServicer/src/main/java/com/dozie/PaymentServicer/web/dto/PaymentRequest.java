@@ -1,4 +1,17 @@
 package com.dozie.PaymentServicer.web.dto;
 
-public class pu {
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder
+public class PaymentRequest {
+    private String orderId;
+    private Long amount;
+    private String referenceId;
+    private PaymentMode paymentMode;
 }
