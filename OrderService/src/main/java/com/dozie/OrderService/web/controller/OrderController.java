@@ -29,4 +29,9 @@ public class OrderController {
         log.info("Fetching all orders");
         return ResponseEntity.ok(orderService.getOrders());
     }
+
+    @GetMapping("/{id}")
+    public ResponseEntity<OrderResponse> getOrderDetails(@PathVariable String id) {
+        return ResponseEntity.ok(orderService.getOrderDetails(id));
+    }
 }

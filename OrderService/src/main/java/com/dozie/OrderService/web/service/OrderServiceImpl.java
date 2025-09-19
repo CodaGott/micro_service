@@ -2,6 +2,7 @@ package com.dozie.OrderService.web.service;
 
 import com.dozie.OrderService.web.entity.Order;
 import com.dozie.OrderService.web.entity.dto.PaymentRequest;
+import com.dozie.OrderService.web.exception.CustomException;
 import com.dozie.OrderService.web.external.client.PaymentService;
 import com.dozie.OrderService.web.external.client.ProductService;
 import com.dozie.OrderService.web.repository.OrderRepository;
@@ -9,6 +10,7 @@ import com.dozie.OrderService.web.request.OrderRequest;
 import com.dozie.OrderService.web.response.OrderResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import java.time.Instant;
@@ -75,5 +77,13 @@ public class OrderServiceImpl implements OrderService {
                 .stream()
                 .map(baseService::buildOrderResponse)
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public OrderResponse getOrderDetails(String id) {
+        Order orderDetails = orderRepository.findById(id).orElseThrow(() ->
+                new CustomException("Order Not Found", "NOT_FOUND", 404));
+
+        return baseService.buildOrderResponse(orderDetails);
     }
 }

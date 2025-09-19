@@ -12,6 +12,8 @@ public class BaseService {
         return OrderResponse.builder()
                 .orderId(request.getId())
                 .orderStatus(request.getOrderStatus())
+                .orderDate(request.getOrderDate())
+                .amount(request.getAmount())
                 .build();
     }
 }
