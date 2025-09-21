@@ -24,6 +24,18 @@ spring:
   config:
     import: configserver:http://localhost:9296
 
+#management:
+#  tracing:
+#    enabled: true
+#
+#micrometer:
+#  tracing:
+#    sampling:
+#      probability: 1.0  # sample all traces; adjust as needed
+#    zipkin:
+#      enabled: true
+#      endpoint: http://localhost:9411/api/v2/spans  # Zipkin's ingestion endpoint
+
 # Define here the Eureka Server you want ths service to point to.
 
 # ===> Commented this because I am using config server to manage all my repeated configurations.

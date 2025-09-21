@@ -3,6 +3,7 @@ package com.dozie.PaymentServicer.web.service;
 import com.dozie.PaymentServicer.web.dto.PaymentRequest;
 import com.dozie.PaymentServicer.web.entity.TransactionDetails;
 import com.dozie.PaymentServicer.web.repository.TransactionDetailsRepository;
+import com.dozie.PaymentServicer.web.response.PaymentResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +14,7 @@ import java.time.OffsetDateTime;
 public class PaymentServiceImpl implements PaymentService {
 
     private final TransactionDetailsRepository transactionDetailsRepository;
+    private final BaseService baseService;
 
     @Override
     public String initiatePayment(PaymentRequest request) {
@@ -27,5 +29,13 @@ public class PaymentServiceImpl implements PaymentService {
         TransactionDetails savedTransaction = transactionDetailsRepository.save(transaction);
 
         return savedTransaction.getId();
+    }
+
+    @Override
+    public PaymentResponse getPaymentDetails(String id) {
+        TransactionDetails transactionDetails = transactionDetailsRepository.findById(id).orElseThrow(
+                () -> new RuntimeException("TransactionDetails not found")); // TODO : Change to the custom Exception later.
+
+        return baseService.buildTransactionResponse(transactionDetails,true);
     }
 }
