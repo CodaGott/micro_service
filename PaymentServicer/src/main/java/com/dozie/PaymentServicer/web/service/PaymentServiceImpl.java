@@ -8,6 +8,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import java.time.OffsetDateTime;
+import java.util.Random;
+import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -25,6 +27,7 @@ public class PaymentServiceImpl implements PaymentService {
         transaction.setOrderId(request.getOrderId());
         transaction.setPaymentStatus("Completed");
         transaction.setPaymentDate(OffsetDateTime.now());
+        transaction.setReferenceNumber(UUID.randomUUID().toString());
 
         TransactionDetails savedTransaction = transactionDetailsRepository.save(transaction);
 

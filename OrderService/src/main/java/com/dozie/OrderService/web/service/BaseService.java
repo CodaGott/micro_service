@@ -3,6 +3,8 @@ package com.dozie.OrderService.web.service;
 import com.dozie.OrderService.web.entity.Order;
 import com.dozie.OrderService.web.external.response.ProductResponse;
 import com.dozie.OrderService.web.response.OrderResponse;
+import com.dozie.OrderService.web.response.PaymentDetails;
+import com.dozie.OrderService.web.response.PaymentResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -16,6 +18,8 @@ public class BaseService {
     public OrderResponse buildOrderResponse(Order request, boolean includeProductDetails){
 
         OrderResponse.ProductDetails productDetails = null;
+        PaymentResponse paymentResponse = null;
+        PaymentDetails paymentDetails = null;
         if (includeProductDetails) {
             ProductResponse productResponse = restTemplate.getForObject(
                     "http://Product-Service/products/" + request.getProductId(), ProductResponse.class
@@ -32,6 +36,19 @@ public class BaseService {
                         .createdDate(productResponse.getCreatedDate())
                         .build();
             }
+            paymentResponse = restTemplate.getForObject(
+                    "http://Payment-Service/api/v1/payments/order/" + request.getId(), PaymentResponse.class
+            );
+            if (paymentResponse != null) {
+                 paymentDetails = PaymentDetails.builder()
+                        .amount(paymentResponse.getAmount())
+                        .paymentDate(paymentResponse.getPaymentDate())
+                        .referenceId(paymentResponse.getReferenceId())
+                        .paymentMode(paymentResponse.getPaymentMode())
+                        .orderId(paymentResponse.getOrderId())
+                        .build();
+            }
+
         }
 
         return OrderResponse.builder()
@@ -40,6 +57,7 @@ public class BaseService {
                 .orderDate(request.getOrderDate())
                 .amount(request.getAmount())
                 .productDetails(productDetails)
+                .paymentDetails(paymentDetails)
                 .build();
     }
 }

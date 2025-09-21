@@ -14,6 +14,7 @@ public class OrderResponse {
     private Instant orderDate;
     private Long amount;
     private ProductDetails productDetails;
+    private PaymentDetails paymentDetails;
 
 
     @Builder

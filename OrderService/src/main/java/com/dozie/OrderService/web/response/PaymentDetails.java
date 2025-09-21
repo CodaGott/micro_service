@@ -8,7 +8,7 @@ import java.time.OffsetDateTime;
 
 @Data
 @Builder
-public class PaymentResponse {
+public class PaymentDetails {
     private String orderId;
     private Long amount;
     private String referenceId;
