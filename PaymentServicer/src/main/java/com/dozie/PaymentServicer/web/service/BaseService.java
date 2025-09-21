@@ -15,27 +15,14 @@ public class BaseService {
     private final RestTemplate restTemplate;
 
 
-    public PaymentResponse buildTransactionResponse(TransactionDetails transactionDetails, boolean isDetails) {
-
-        OrderResponse orderResponse = null;
-
-        if (isDetails) {
-
-            orderResponse = restTemplate.getForObject(
-                    "http://Order-service/orders/" + transactionDetails.getOrderId(), OrderResponse.class
-            );
-            if (orderResponse != null) {
-                orderResponse.setOrderDate(transactionDetails.getPaymentDate().toInstant());
-                orderResponse.setAmount(transactionDetails.getAmount());
-            }
-
-        }
+    public PaymentResponse buildTransactionResponse(TransactionDetails transactionDetails) {
 
         return PaymentResponse.builder()
                 .paymentMode(PaymentMode.valueOf(transactionDetails.getPaymentMode()))
                 .amount(transactionDetails.getAmount())
                 .referenceId(transactionDetails.getReferenceNumber())
-                .orderResponse(orderResponse)
+                .orderId(transactionDetails.getOrderId())
+                .paymentDate(transactionDetails.getPaymentDate())
                 .build();
     }
 }

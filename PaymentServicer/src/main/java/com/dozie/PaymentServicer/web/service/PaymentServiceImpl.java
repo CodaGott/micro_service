@@ -32,10 +32,11 @@ public class PaymentServiceImpl implements PaymentService {
     }
 
     @Override
-    public PaymentResponse getPaymentDetails(String id) {
-        TransactionDetails transactionDetails = transactionDetailsRepository.findById(id).orElseThrow(
-                () -> new RuntimeException("TransactionDetails not found")); // TODO : Change to the custom Exception later.
-
-        return baseService.buildTransactionResponse(transactionDetails,true);
+    public PaymentResponse getPaymentDetailsByOrderId(String orderId) {
+        TransactionDetails transactionDetails = transactionDetailsRepository.findByOrderId(orderId);
+        if(transactionDetails == null){
+            throw new RuntimeException("Order with id " + orderId + " not found"); // TODO : Change to the custom Exception later.
+        }
+        return baseService.buildTransactionResponse(transactionDetails);
     }
 }

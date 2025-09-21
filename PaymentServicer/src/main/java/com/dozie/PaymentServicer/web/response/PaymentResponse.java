@@ -4,6 +4,8 @@ import com.dozie.PaymentServicer.web.dto.PaymentMode;
 import lombok.Builder;
 import lombok.Data;
 
+import java.time.OffsetDateTime;
+
 @Data
 @Builder
 public class PaymentResponse {
@@ -11,5 +13,5 @@ public class PaymentResponse {
     private Long amount;
     private String referenceId;
     private PaymentMode paymentMode;
-    private OrderResponse orderResponse;
+    private OffsetDateTime paymentDate;
 }
