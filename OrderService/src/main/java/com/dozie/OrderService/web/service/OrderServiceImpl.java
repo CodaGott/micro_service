@@ -5,13 +5,14 @@ import com.dozie.OrderService.web.entity.dto.PaymentRequest;
 import com.dozie.OrderService.web.exception.CustomException;
 import com.dozie.OrderService.web.external.client.PaymentService;
 import com.dozie.OrderService.web.external.client.ProductService;
+import com.dozie.OrderService.web.external.response.ProductResponse;
 import com.dozie.OrderService.web.repository.OrderRepository;
 import com.dozie.OrderService.web.request.OrderRequest;
 import com.dozie.OrderService.web.response.OrderResponse;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.RestTemplate;
 
 import java.time.Instant;
 import java.util.List;
@@ -68,14 +69,14 @@ public class OrderServiceImpl implements OrderService {
         order = orderRepository.save(order);
         log.info("order completed {}", order);
 
-        return baseService.buildOrderResponse(order);
+        return baseService.buildOrderResponse(order, false);
     }
 
     @Override
     public List<OrderResponse> getOrders() {
         return orderRepository.findAll()
                 .stream()
-                .map(baseService::buildOrderResponse)
+                .map(order -> baseService.buildOrderResponse(order, false))
                 .collect(Collectors.toList());
     }
 
@@ -84,6 +85,7 @@ public class OrderServiceImpl implements OrderService {
         Order orderDetails = orderRepository.findById(id).orElseThrow(() ->
                 new CustomException("Order Not Found", "NOT_FOUND", 404));
 
-        return baseService.buildOrderResponse(orderDetails);
+        log.info("Calling Product details with rest-template for product id {}", orderDetails.getProductId());
+        return baseService.buildOrderResponse(orderDetails, true);
     }
 }
