@@ -11,7 +11,7 @@ spring:
     hibernate:
       ddl-auto: update
   application:
-    name: Order-Service
+    name: ORDER-SERVICE
   config:
     import: configserver:${CONFIG_SERVER_ADDRESS:http://localhost:9296}
   zipkin:

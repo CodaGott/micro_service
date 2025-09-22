@@ -22,7 +22,7 @@ public class BaseService {
         PaymentDetails paymentDetails = null;
         if (includeProductDetails) {
             ProductResponse productResponse = restTemplate.getForObject(
-                    "http://Product-Service/products/" + request.getProductId(), ProductResponse.class
+                    "http://PRODUCT-SERVICE/products/" + request.getProductId(), ProductResponse.class
             );
             if (productResponse != null) {
                 productDetails = OrderResponse.ProductDetails.builder()
@@ -37,7 +37,7 @@ public class BaseService {
                         .build();
             }
             paymentResponse = restTemplate.getForObject(
-                    "http://Payment-Service/api/v1/payments/order/" + request.getId(), PaymentResponse.class
+                    "http://PAYMENT-SERVICE/api/v1/payments/order/" + request.getId(), PaymentResponse.class
             );
             if (paymentResponse != null) {
                  paymentDetails = PaymentDetails.builder()
