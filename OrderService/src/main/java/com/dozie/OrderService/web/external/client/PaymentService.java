@@ -16,6 +16,6 @@ public interface PaymentService {
     ResponseEntity<String> initiatePayment(@RequestBody PaymentRequest request);
 
     default void fallback(Exception e){
-        throw new CustomException("Payment service not available at the moment", "Internal server error", 500);
+        throw new CustomException("Payment service not available at the moment", "UNAVAILABLE", 500);
     }
 }

@@ -18,6 +18,6 @@ public interface ProductService {
                                         @RequestParam("quantity") Integer quantity);
 
     default void fallback(Exception e){
-        throw new CustomException("Product service not available at the moment", "Internal server error", 500);
+        throw new CustomException("Product service not available at the moment", "UNAVAILABLE", 500);
     }
 }
